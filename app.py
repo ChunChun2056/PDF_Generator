@@ -252,12 +252,12 @@ def index():
 @app.route('/generate_pdf', methods=['POST'])
 def generate_pdf():
     # Get data from the AJAX request
-    name = request.form.get('name')
-    quote = request.form.get('quote')
+    name = request.form.get('name') or ''  # Optional: default to empty string
+    quote = request.form.get('quote') or ''  # Optional: default to empty string
     name_color = request.form.get('nameColor', '#000000')
     quote_color = request.form.get('quoteColor', '#000000')
 
-    # Handle logo upload
+    # Handle logo upload (REQUIRED)
     if 'logo' not in request.files:
         return jsonify({'error': 'No logo file provided'}), 400
     logo_file = request.files['logo']
@@ -293,7 +293,7 @@ def generate_pdf():
         io.BytesIO(pdf_content),
         mimetype='application/pdf',
         as_attachment=True,
-        download_name=f"{normalize_name(name)}.pdf"
+        download_name=f"{normalize_name(name) or 'generated'}.pdf"
     )
 
 # Global variables to hold the process and event

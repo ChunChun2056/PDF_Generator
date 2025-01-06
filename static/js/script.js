@@ -133,53 +133,57 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   
     // Individual PDF generation
-    if (generatePdfBtn) {
-      generatePdfBtn.addEventListener("click", () => {
-        debugLog("Individual PDF generation button clicked");
+if (generatePdfBtn) {
+    generatePdfBtn.addEventListener("click", () => {
+      debugLog("Individual PDF generation button clicked");
   
-        // Validate required elements
-        if (!logoInput || !nameInput) {
-          updateStatus("Error: Required form elements not found");
-          return;
-        }
+      // Validate required elements
+      if (!logoInput) {
+        updateStatus("Error: Logo form element not found");
+        return;
+      }
   
-        const logoFile = logoInput.querySelector('input[type="file"]').files[0];
-        if (!logoFile) {
-          updateStatus("Please select a logo file.");
-          return;
-        }
+      // Check if a logo file is selected
+      const logoFile = logoInput.querySelector('input[type="file"]').files[0];
+      if (!logoFile) {
+        updateStatus("Please select a logo file.");
+        return;
+      }
   
-        if (!nameInput.value.trim()) {
-          updateStatus("Please enter a name.");
-          return;
-        }
+      const formData = new FormData();
+      formData.append("logo", logoFile);
   
-        const formData = new FormData();
-        formData.append("logo", logoFile);
-        formData.append("name", nameInput.value);
-        formData.append("quote", quoteInput ? quoteInput.value : "");
+      // Conditionally append other values only if they are provided
+      if (nameInput && nameInput.value.trim()) {
+          formData.append('name', nameInput.value.trim());
+      }
+      if (quoteInput && quoteInput.value.trim()) {
+          formData.append('quote', quoteInput.value.trim());
+      }
   
-        // Add the cropped image data if available
-        if (croppedImageData) {
-          formData.append("photo", croppedImageData, "cropped.jpg");
-        }
+      // Add the cropped image data if available
+      if (croppedImageData) {
+        formData.append("photo", croppedImageData, "cropped.jpg");
+      }
   
-        if (nameColorInput) {
-          formData.append("nameColor", nameColorInput.value);
-        }
+      if (nameColorInput) {
+        formData.append("nameColor", nameColorInput.value);
+      }
   
-        if (quoteColorInput) {
-          formData.append("quoteColor", quoteColorInput.value);
-        }
+      if (quoteColorInput) {
+        formData.append("quoteColor", quoteColorInput.value);
+      }
   
-        updateStatus("Generating PDF...");
-        handlePdfGeneration(
-          formData,
-          "/generate_pdf",
-          `${nameInput.value.replace(/ /g, "_")}.pdf`
-        );
-      });
-    }
+      updateStatus("Generating PDF...");
+      handlePdfGeneration(
+        formData,
+        "/generate_pdf",
+        // Use a default name or timestamp if nameInput is empty
+        `${nameInput && nameInput.value.trim() ? nameInput.value.replace(/ /g, '_') : 'generated'}.pdf`
+      );
+    });
+  }
+  
   
     // Handle Photo Upload
     photoInput.addEventListener("change", (event) => {
