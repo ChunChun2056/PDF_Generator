@@ -2,221 +2,151 @@
 
 <html>
   <head>
-       
     <title>PDF Generator</title>
 
-       
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/style.css') }}"
     />
-
-       
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"
+    />
   </head>
 
   <body>
-       
     <div class="container">
-             
       <h1>PDF Generator</h1>
 
-             
       <form id="logoForm" enctype="multipart/form-data">
-                   
         <div class="section">
-                         
           <h2>Company Logo</h2>
 
-                         
           <input type="file" id="logoInput" name="logo" accept="image/*" />
-
-                     
         </div>
-
-               
       </form>
 
-             
-      <div class="tabs">          
+      <div class="tabs">
         <button class="tab active" data-target="individual">
           Individual Generation
         </button>
 
-                   
         <button class="tab" data-target="bulk">Bulk Generation</button>
-
-               
       </div>
 
-             
       <div id="individual" class="tab-content active">
-                   
         <form id="individualForm" enctype="multipart/form-data">
-                         
           <div class="section">
-                                <label for="nameInput">Name:</label>
+            <label for="nameInput">Name:</label>
 
-                                <input type="text" id="nameInput" name="name" />
-
-                           
+            <input type="text" id="nameInput" name="name" />
           </div>
 
-                         
           <div class="section">
-                                <label for="quoteInput">Quote:</label>
+            <label for="quoteInput">Quote:</label>
 
-                               
             <input type="text" id="quoteInput" name="quote" />
-
-                           
           </div>
 
-                         
           <div class="section">
-                                <label for="photoInput">Photo:</label>
+            <label for="photoInput">Photo:</label>
 
-                               
-            <input type="file" id="photoInput" name="photo" accept="image/*" />
-
-                           
+            <input
+              type="file"
+              id="photoInput"
+              name="photo"
+              accept="image/*"
+            />
           </div>
 
-                         
           <div class="section">
-                                <label for="nameColorInput">Name Color:</label>
+            <label for="nameColorInput">Name Color:</label>
 
-                               
             <input
               type="color"
               id="nameColorInput"
               name="nameColor"
               value="#000000"
             />
-
-                           
           </div>
 
-                         
           <div class="section">
-                               
             <label for="quoteColorInput">Quote Color:</label>
 
-                               
             <input
               type="color"
               id="quoteColorInput"
               name="quoteColor"
               value="#000000"
             />
-
-                           
           </div>
 
-                         
           <button type="button" id="generatePdfBtn">Generate PDF</button>
-
-                     
         </form>
-
-               
       </div>
 
-             
       <div id="bulk" class="tab-content">
-                   
         <form id="bulkForm" enctype="multipart/form-data">
-                         
           <div class="section">
-                                <label for="csvInput">CSV File:</label>
+            <label for="csvInput">CSV File:</label>
 
-                               
             <input type="file" id="csvInput" name="csv" accept=".csv" />
-
-                           
           </div>
 
-                         
           <div class="section">
-                               
             <label for="photosZipInput">Photos ZIP File:</label>
 
-                               
             <input
               type="file"
               id="photosZipInput"
               name="photosZip"
               accept=".zip"
             />
-
-                           
           </div>
 
-                         
           <div class="section">
-                               
             <label for="bulkNameColorInput">Name Color:</label>
 
-                               
             <input
               type="color"
               id="bulkNameColorInput"
               name="nameColor"
               value="#000000"
             />
-
-                           
           </div>
 
-                         
           <div class="section">
-                               
             <label for="bulkQuoteColorInput">Quote Color:</label>
 
-                               
             <input
               type="color"
               id="bulkQuoteColorInput"
               name="quoteColor"
               value="#000000"
             />
-
-                           
           </div>
 
-                         
-          <button type="button" id="generateBulkPdfsBtn">Generate PDFs</button>
-
-                     
+          <button type="button" id="generateBulkPdfsBtn">
+            Generate PDFs
+          </button>
         </form>
-
-               
       </div>
 
-             
       <div id="status">Ready</div>
-
-         
     </div>
 
-       
-    <div id="popup" class="popup" style="display: none">
-             
-      <div class="popup-content">
-                   
-        <h3>Generating PDFs...</h3>
-
-                   
-        <div class="loader"></div>
-
-                    <button id="cancelBtn">Cancel</button>
-
-               
+    <div id="cropModal" class="modal">
+      <div class="modal-content">
+        <div class="image-container">
+          <img id="imageToCrop" src="#" />
+        </div>
+        <button id="cropAndSaveButton">Crop and Save</button>
+        <button id="cancelButton">Cancel</button>
       </div>
-
-         
     </div>
 
-       
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   </body>
 </html>
